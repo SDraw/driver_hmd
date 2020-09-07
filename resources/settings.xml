@@ -1,0 +1,6 @@
+<settings>
+    <setting name="resolution" value="640 480"/>
+    <setting name="fps" value="60.0"/>
+    <setting name="position" value="0.0 0.0 0.0"/>
+    <setting name="rotation" value="0.0 0.0 0.0 1.0"/>
+</settings>
