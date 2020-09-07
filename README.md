@@ -17,6 +17,8 @@ Edit `resources/settings.xml` for your display:
 If you have controllers `hmd_monitor` performs HMD position and rotation transformation based on input of left controller:
 * Grip double-press: perform rotation changing.
   * Trigger hold: perform position changing.
+
+Changes are saved on SteamVR shutdown and loaded on SteamVR startup.
   
 # Building
 * Clone repository with git
