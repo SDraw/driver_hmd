@@ -12,7 +12,6 @@ CMonitorCore::CMonitorCore()
     m_active = false;
 
     m_vrSystem = nullptr;
-    m_vrDebug = nullptr;
     m_handDevice = vr::k_unTrackedDeviceIndexInvalid;
     m_event = { 0 };
 
@@ -36,7 +35,6 @@ bool CMonitorCore::Initialize()
         m_vrSystem = vr::VR_Init(&l_error, vr::VRApplication_Utility);
         if(l_error == vr::VRInitError_None)
         {
-            m_vrDebug = vr::VRDebug();
             m_handDevice = m_vrSystem->GetTrackedDeviceIndexForControllerRole(vr::TrackedControllerRole_LeftHand);
 
             m_active = true;
@@ -51,9 +49,7 @@ void CMonitorCore::Terminate()
     if(m_active)
     {
         vr::VR_Shutdown();
-
         m_vrSystem = nullptr;
-        m_vrDebug = nullptr;
 
         m_active = false;
     }
@@ -167,7 +163,7 @@ bool CMonitorCore::DoPulse()
 
         char l_response[32U];
         std::memset(l_response, 0, 32U);
-        m_vrDebug->DriverDebugRequest(vr::k_unTrackedDeviceIndex_Hmd, l_debugMessage.c_str(), l_response, 32U);
+        vr::VRDebug()->DriverDebugRequest(vr::k_unTrackedDeviceIndex_Hmd, l_debugMessage.c_str(), l_response, 32U);
 
         m_lastHandPosition = m_handPosition;
         m_lastHandRotation = m_handRotation;

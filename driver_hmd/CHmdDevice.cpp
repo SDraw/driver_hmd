@@ -137,9 +137,9 @@ void CHmdDevice::DebugRequest(const char *pchRequest, char *pchResponseBuffer, u
         m_pose.vecPosition[2U] += l_diffPos.z;
 
         glm::quat l_diffRot;
-        for(int i = 0; i < 4; i++)l_message >> l_diffRot[i];
+        for(int i = 0; i < 4; i++) l_message >> l_diffRot[i];
 
-        glm::quat l_deviceRot(m_pose.qRotation.w, m_pose.qRotation.x, m_pose.qRotation.y, m_pose.qWorldFromDriverRotation.z);
+        glm::quat l_deviceRot(m_pose.qRotation.w, m_pose.qRotation.x, m_pose.qRotation.y, m_pose.qRotation.z);
         glm::quat l_newRot = l_deviceRot*l_diffRot;
 
         m_pose.qRotation.w = l_newRot.w;
@@ -203,5 +203,8 @@ vr::DistortionCoordinates_t CHmdDevice::ComputeDistortion(vr::EVREye eEye, float
 
 void CHmdDevice::RunFrame()
 {
-    vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_trackedDevice, m_pose, sizeof(vr::DriverPose_t));
+    if(m_trackedDevice != vr::k_unTrackedDeviceIndexInvalid)
+    {
+        vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_trackedDevice, m_pose, sizeof(vr::DriverPose_t));
+    }
 }

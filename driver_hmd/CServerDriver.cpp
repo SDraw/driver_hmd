@@ -15,7 +15,6 @@ const char* const CServerDriver::ms_interfaces[]
 
 CServerDriver::CServerDriver()
 {
-    m_driverHost = nullptr;
     m_hmdDevice = nullptr;
 }
 CServerDriver::~CServerDriver()
@@ -25,7 +24,6 @@ CServerDriver::~CServerDriver()
 vr::EVRInitError CServerDriver::Init(vr::IVRDriverContext *pDriverContext)
 {
     VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
-    m_driverHost = vr::VRServerDriverHost();
 
     m_driverConfig = new CDriverConfig();
     m_driverConfig->Load();
@@ -35,7 +33,7 @@ vr::EVRInitError CServerDriver::Init(vr::IVRDriverContext *pDriverContext)
     m_hmdDevice->SetFPS(m_driverConfig->GetFPS());
     m_hmdDevice->SetTransformation(m_driverConfig->GetPosition(), m_driverConfig->GetRotation());
 
-    m_driverHost->TrackedDeviceAdded(m_hmdDevice->GetSerial().c_str(), vr::TrackedDeviceClass_HMD, m_hmdDevice);
+    vr::VRServerDriverHost()->TrackedDeviceAdded(m_hmdDevice->GetSerial().c_str(), vr::TrackedDeviceClass_HMD, m_hmdDevice);
 
     // Start utility app that closes itself on SteamVR shutdown
     std::string l_path(g_modulePath);
@@ -67,7 +65,6 @@ void CServerDriver::Cleanup()
     delete m_driverConfig;
     m_driverConfig = nullptr;
 
-    m_driverHost = nullptr;
     VR_CLEANUP_SERVER_DRIVER_CONTEXT();
 }
 

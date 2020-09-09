@@ -5,7 +5,6 @@ class CHmdDevice;
 
 class CServerDriver final : public vr::IServerTrackedDeviceProvider
 {
-    vr::IVRServerDriverHost *m_driverHost;
     static const char* const ms_interfaces[];
 
     CDriverConfig *m_driverConfig;

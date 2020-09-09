@@ -5,7 +5,6 @@ class CMonitorCore
     bool m_active;
 
     vr::IVRSystem *m_vrSystem;
-    vr::IVRDebug *m_vrDebug;
     vr::TrackedDeviceIndex_t m_handDevice;
     vr::VREvent_t m_event;
 
