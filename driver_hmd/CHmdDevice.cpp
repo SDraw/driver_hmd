@@ -7,7 +7,7 @@ CHmdDevice::CHmdDevice()
     m_propertyContainer = vr::k_ulInvalidPropertyContainer;
     m_pose = { 0 };
 
-    m_pose.poseTimeOffset = -0.016;
+    m_pose.poseTimeOffset = 0.f;
     m_pose.qWorldFromDriverRotation.w = 1.0;
     m_pose.qWorldFromDriverRotation.x = .0;
     m_pose.qWorldFromDriverRotation.y = .0;
@@ -52,7 +52,7 @@ void CHmdDevice::SetResolution(const glm::uvec2 &f_res)
 
 void CHmdDevice::SetFPS(const float f_fps)
 {
-
+    m_fps = f_fps;
 }
 
 void CHmdDevice::GetTransformation(glm::vec3 &f_pos, glm::quat &f_rot)
