@@ -1,4 +1,5 @@
 #pragma once
+
 class CDriverConfig final
 {
     glm::uvec2 m_resolution;

@@ -25,6 +25,7 @@ CDriverConfig::CDriverConfig()
     m_position = glm::vec3(0.f);
     m_rotation = glm::quat(1.f, 0.f, 0.f, 0.f);
 }
+
 CDriverConfig::~CDriverConfig()
 {
 }
@@ -100,9 +101,9 @@ void CDriverConfig::Save()
                         case SI_Resolution:
                         {
                             std::string l_value;
-                            for(int i = 0; i < 2; i++)
+                            for(int j = 0; j < 2; j++)
                             {
-                                l_value.append(std::to_string(m_resolution[i]));
+                                l_value.append(std::to_string(m_resolution[j]));
                                 l_value.push_back(' ');
                             }
                             l_valueAttrib.set_value(l_value.c_str());
@@ -113,9 +114,9 @@ void CDriverConfig::Save()
                         case SI_Position:
                         {
                             std::string l_value;
-                            for(int i = 0; i < 3; i++)
+                            for(int j = 0; j < 3; j++)
                             {
-                                l_value.append(std::to_string(m_position[i]));
+                                l_value.append(std::to_string(m_position[j]));
                                 l_value.push_back(' ');
                             }
                             l_valueAttrib.set_value(l_value.c_str());
@@ -123,9 +124,9 @@ void CDriverConfig::Save()
                         case SI_Rotation:
                         {
                             std::string l_value;
-                            for(int i = 0; i < 4; i++)
+                            for(int j = 0; j < 4; j++)
                             {
-                                l_value.append(std::to_string(m_rotation[i]));
+                                l_value.append(std::to_string(m_rotation[j]));
                                 l_value.push_back(' ');
                             }
                             l_valueAttrib.set_value(l_value.c_str());

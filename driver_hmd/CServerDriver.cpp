@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include "CServerDriver.h"
 #include "CDriverConfig.h"
 #include "CHmdDevice.h"
@@ -15,8 +16,10 @@ const char* const CServerDriver::ms_interfaces[]
 
 CServerDriver::CServerDriver()
 {
+    m_driverConfig = nullptr;
     m_hmdDevice = nullptr;
 }
+
 CServerDriver::~CServerDriver()
 {
 }

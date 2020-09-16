@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include "CHmdDevice.h"
 
 CHmdDevice::CHmdDevice()
@@ -36,47 +37,12 @@ CHmdDevice::CHmdDevice()
     m_resolution = glm::uvec2(640U, 480U);
     m_fps = 60.f;
 }
+
 CHmdDevice::~CHmdDevice()
 {
 }
 
-const std::string& CHmdDevice::GetSerial() const
-{
-    return m_serial;
-}
-
-void CHmdDevice::SetResolution(const glm::uvec2 &f_res)
-{
-    std::memcpy(&m_resolution, &f_res, sizeof(glm::uvec2));
-}
-
-void CHmdDevice::SetFPS(const float f_fps)
-{
-    m_fps = f_fps;
-}
-
-void CHmdDevice::GetTransformation(glm::vec3 &f_pos, glm::quat &f_rot)
-{
-    f_pos.x = m_pose.vecPosition[0U];
-    f_pos.y = m_pose.vecPosition[1U];
-    f_pos.z = m_pose.vecPosition[2U];
-    f_rot.x = m_pose.qRotation.x;
-    f_rot.y = m_pose.qRotation.y;
-    f_rot.z = m_pose.qRotation.z;
-    f_rot.w = m_pose.qRotation.w;
-}
-
-void CHmdDevice::SetTransformation(const glm::vec3 &f_pos, const glm::quat &f_rot)
-{
-    m_pose.vecPosition[0U] = f_pos.x;
-    m_pose.vecPosition[1U] = f_pos.y;
-    m_pose.vecPosition[2U] = f_pos.z;
-    m_pose.qRotation.x = f_rot.x;
-    m_pose.qRotation.y = f_rot.y;
-    m_pose.qRotation.z = f_rot.z;
-    m_pose.qRotation.w = f_rot.w;
-}
-
+// vr::ITrackedDeviceServerDriver
 vr::EVRInitError CHmdDevice::Activate(uint32_t unObjectId)
 {
     m_trackedDevice = unObjectId;
@@ -154,6 +120,7 @@ vr::DriverPose_t CHmdDevice::GetPose()
     return m_pose;
 }
 
+// vr::IVRDisplayComponent
 void CHmdDevice::GetWindowBounds(int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     *pnX = 0;
@@ -199,6 +166,44 @@ vr::DistortionCoordinates_t CHmdDevice::ComputeDistortion(vr::EVREye eEye, float
     l_coordinates.rfRed[0] = fU;
     l_coordinates.rfRed[1] = fV;
     return l_coordinates;
+}
+
+// CHmdDevice
+const std::string& CHmdDevice::GetSerial() const
+{
+    return m_serial;
+}
+
+void CHmdDevice::SetResolution(const glm::uvec2 &f_res)
+{
+    std::memcpy(&m_resolution, &f_res, sizeof(glm::uvec2));
+}
+
+void CHmdDevice::SetFPS(const float f_fps)
+{
+    m_fps = f_fps;
+}
+
+void CHmdDevice::GetTransformation(glm::vec3 &f_pos, glm::quat &f_rot)
+{
+    f_pos.x = m_pose.vecPosition[0U];
+    f_pos.y = m_pose.vecPosition[1U];
+    f_pos.z = m_pose.vecPosition[2U];
+    f_rot.x = m_pose.qRotation.x;
+    f_rot.y = m_pose.qRotation.y;
+    f_rot.z = m_pose.qRotation.z;
+    f_rot.w = m_pose.qRotation.w;
+}
+
+void CHmdDevice::SetTransformation(const glm::vec3 &f_pos, const glm::quat &f_rot)
+{
+    m_pose.vecPosition[0U] = f_pos.x;
+    m_pose.vecPosition[1U] = f_pos.y;
+    m_pose.vecPosition[2U] = f_pos.z;
+    m_pose.qRotation.x = f_rot.x;
+    m_pose.qRotation.y = f_rot.y;
+    m_pose.qRotation.z = f_rot.z;
+    m_pose.qRotation.w = f_rot.w;
 }
 
 void CHmdDevice::RunFrame()

@@ -27,17 +27,16 @@ class CHmdDevice final : public vr::ITrackedDeviceServerDriver, public vr::IVRDi
     void GetProjectionRaw(vr::EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom);
     vr::DistortionCoordinates_t ComputeDistortion(vr::EVREye eEye, float fU, float fV);
 public:
-    const std::string& GetSerial() const;
-    void GetTransformation(glm::vec3 &f_pos, glm::quat &f_rot);
-protected:
     CHmdDevice();
     ~CHmdDevice();
+
+    const std::string& GetSerial() const;
     
     void SetResolution(const glm::uvec2 &f_res);
     void SetFPS(const float f_fps);
+
     void SetTransformation(const glm::vec3 &f_pos, const glm::quat &f_rot);
+    void GetTransformation(glm::vec3 &f_pos, glm::quat &f_rot);
 
     void RunFrame();
-
-    friend class CServerDriver;
 };
