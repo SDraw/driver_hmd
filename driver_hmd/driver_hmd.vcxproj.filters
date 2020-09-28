@@ -6,10 +6,10 @@
     <ClCompile Include="CServerDriver.cpp" />
     <ClCompile Include="CHmdDevice.cpp" />
     <ClCompile Include="CDriverConfig.cpp" />
-    <ClCompile Include="..\..\..\repos\run-on-coal\vendor\pugixml\src\pugixml.cpp">
+    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="..\vendor\pugixml\src\pugixml.cpp">
       <Filter>vendor\pugixml</Filter>
     </ClCompile>
-    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
