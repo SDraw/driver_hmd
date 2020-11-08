@@ -14,10 +14,16 @@ Edit `resources/settings.xml` for your display:
 * **resolution:** full resolution of your monitor.
 * **fps:** maximal frames per second of your monitor.
 
-## Notes
-If you have controllers `hmd_monitor` performs HMD position and rotation transformation based on input of left controller:
-* Grip double-press: perform rotation changing.
-  * Trigger hold: perform position changing.
+## Controls
+* **Left/right arrows**: Move localy left/right.
+* **Up/down arrow:** Move localy forward/backward.
+* **Num8/Num2:** Move localy up/down.
+* **Num7/Num9:** Rotate localy up/down.
+* **Num4/Num6:** Rotate localy left/right.
+* **Num1/Num3:** Rotate localy anti-clockwise/clockwise.
+* If you have VR controllers connected:
+  * **Grip double-press and hold of left controller:** Start rotation changing. Release grip to stop.
+    * **Trigger hold:** Start global position changing. Release trigger to stop.
 
 Changes are saved on SteamVR shutdown and loaded on SteamVR startup.
   

@@ -6,6 +6,13 @@ const std::chrono::microseconds g_threadDelay(16U);
 const glm::vec3 g_zeroPoint3(0.f);
 const glm::vec4 g_zeroPoint4(0.f, 0.f, 0.f, 1.f);
 const glm::quat g_zeroRotation(1.f, 0.f, 0.f, 0.f);
+const glm::vec3 g_axisX(1.f, 0.f, 0.f);
+const glm::vec3 g_axisY(0.f, 1.f, 0.f);
+const glm::vec3 g_axisZ(0.f, 0.f, -1.f);
+const glm::vec3 g_axisXN(-1.f, 0.f, 0.f);
+const glm::vec3 g_axisYN(0.f, -1.f, 0.f);
+const glm::vec3 g_axisZN(0.f, 0.f, 1.f);
+const float g_singleAngle = glm::pi<float>() / 180.f / 10.f;
 
 CMonitorCore::CMonitorCore()
 {
@@ -146,28 +153,69 @@ bool CMonitorCore::DoPulse()
 
     if(m_trasnformActive)
     {
-        glm::vec3 l_posDiff = (m_triggerClicked ? (m_handPosition - m_lastHandPosition) : g_zeroPoint3);
-        glm::quat l_rotDiff = (m_triggerClicked ? g_zeroRotation : (glm::inverse(m_lastHandRotation)*m_handRotation));
+        glm::vec3 l_pos = (m_triggerClicked ? (m_handPosition - m_lastHandPosition) : g_zeroPoint3);
+        glm::quat l_rot = (m_triggerClicked ? g_zeroRotation : (glm::inverse(m_lastHandRotation)*m_handRotation));
 
-        std::string l_debugMessage("transform ");
-        for(int i = 0; i < 3; i++)
-        {
-            l_debugMessage.append(std::to_string(l_posDiff[i]));
-            l_debugMessage.push_back(' ');
-        }
-        for(int i = 0; i < 4; i++)
-        {
-            l_debugMessage.append(std::to_string(l_rotDiff[i]));
-            l_debugMessage.push_back(' ');
-        }
+        std::string l_message("transform ");
+        AppendToString(l_message, l_pos);
+        AppendToString(l_message, l_rot);
 
         char l_response[32U];
         std::memset(l_response, 0, 32U);
-        vr::VRDebug()->DriverDebugRequest(vr::k_unTrackedDeviceIndex_Hmd, l_debugMessage.c_str(), l_response, 32U);
+        vr::VRDebug()->DriverDebugRequest(vr::k_unTrackedDeviceIndex_Hmd, l_message.c_str(), l_response, 32U);
 
         m_lastHandPosition = m_handPosition;
         m_lastHandRotation = m_handRotation;
     }
+    else
+    {
+        if((GetKeyState(VK_NUMLOCK) & 0xFFFF) != 0)
+        {
+            glm::vec3 l_pos(g_zeroPoint3);
+            glm::quat l_rot(g_zeroRotation);
+
+            glm::mat4 l_headTransform;
+            ConvertMatrix(l_pose[vr::k_unTrackedDeviceIndex_Hmd].mDeviceToAbsoluteTracking, l_headTransform);
+            glm::quat l_headRot = glm::quat_cast(l_headTransform);
+
+            // Forward-backward
+            if(GetAsyncKeyState(VK_UP) & 0x8000) l_pos += l_headRot*(g_axisZ*0.001f);
+            else if(GetAsyncKeyState(VK_DOWN) & 0x8000) l_pos += l_headRot*(g_axisZN*0.001f);
+
+            // Left-right
+            if(GetAsyncKeyState(VK_LEFT) & 0x8000) l_pos += l_headRot*(g_axisXN*0.001f);
+            else if(GetAsyncKeyState(VK_RIGHT) & 0x8000) l_pos += l_headRot*(g_axisX*0.001f);
+
+            // Up-down
+            if(GetAsyncKeyState(VK_NUMPAD8) & 0x8000) l_pos += l_headRot*(g_axisY*0.001f);
+            else if(GetAsyncKeyState(VK_NUMPAD2) & 0x8000) l_pos += l_headRot*(g_axisYN*0.001f);
+
+            // Rotate localy around Y
+            if(GetAsyncKeyState(VK_NUMPAD4) & 0x8000) l_rot *= glm::angleAxis(g_singleAngle, g_axisY);
+            else if(GetAsyncKeyState(VK_NUMPAD6) & 0x8000) l_rot *= glm::angleAxis(-g_singleAngle, g_axisY);
+
+            // Rotate localy around X
+            if(GetAsyncKeyState(VK_NUMPAD7) & 0x8000) l_rot *= glm::angleAxis(-g_singleAngle, g_axisX);
+            else if(GetAsyncKeyState(VK_NUMPAD9) & 0x8000) l_rot *= glm::angleAxis(g_singleAngle, g_axisX);
+
+            // Rotate localy around Z
+            if(GetAsyncKeyState(VK_NUMPAD1) & 0x8000) l_rot *= glm::angleAxis(-g_singleAngle, g_axisZ);
+            else if(GetAsyncKeyState(VK_NUMPAD3) & 0x8000) l_rot *= glm::angleAxis(g_singleAngle, g_axisZ);
+
+            if((l_pos != g_zeroPoint3) || (l_rot != g_zeroRotation))
+            {
+                std::string l_message("transform ");
+                AppendToString(l_message, l_pos);
+                AppendToString(l_message, l_rot);
+
+                char l_response[32U];
+                std::memset(l_response, 0, 32U);
+                vr::VRDebug()->DriverDebugRequest(vr::k_unTrackedDeviceIndex_Hmd, l_message.c_str(), l_response, 32U);
+            }
+        }
+    }
+
+    if(m_handDevice == vr::k_unTrackedDeviceIndexInvalid) m_handDevice = m_vrSystem->GetTrackedDeviceIndexForControllerRole(vr::TrackedControllerRole_LeftHand);
 
     std::this_thread::sleep_for(g_threadDelay);
     return m_active;
