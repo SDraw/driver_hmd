@@ -1,4 +1,4 @@
-# Driver HMD [![Build status](https://ci.appveyor.com/api/projects/status/lfnha0ipgxmuawb9?svg=true)](https://ci.appveyor.com/project/SDraw/driver-hmd) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# Driver HMD [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 SteamVR driver for turning desktop display into HMD.
 
 ## Installation
